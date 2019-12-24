@@ -7,8 +7,8 @@
 <textarea id="canvas_text" cols="10" rows="5">テキスト</textarea>
 <!--ダウンロード用ボタン-->
 <button id="input_button">文字描画</button>
-<button id="download_button">ダウンロードする</button>
-<button id="load_text">文字読み込み</button>
+<button id="download_button_in">内側用としてダウンロード</button>
+<button id="download_button_out">外側用としてダウンロード</button>
 <!--ダウンロード用リンク-->
 <a id="download_link"></a>
 <script>
@@ -18,13 +18,15 @@
         var canvas = document.getElementById('my_canvas');
         var downloadLink = document.getElementById('download_link');
         var filename = 'UnityImageIn.png';
+	var filename2 = 'UnityImageOut.png';
 	var x = canvas.width / 2;
 	var y = canvas.height / 3;
 
-	var button2 = document.getElementById('load_text');
-        button2.addEventListener('click', function(){
-	alert("https://scrapbox.io/api/code/tsukalab/ブラインドディスプレイ/内側.txt" + '\n' + "https://scrapbox.io/api/code/tsukalab/ブラインドディスプレイ/外側.txt");
-	});
+	//var button2 = document.getElementById('load_text');
+        //button2.addEventListener('click', function(){
+	//var textin = "https://scrapbox.io/api/code/tsukalab/ブラインドディスプレイ/内側.txt";
+	//alert(textin);
+	//});
 
 	var button1 = document.getElementById('input_button');
         button1.addEventListener('click', function(){
@@ -47,7 +49,7 @@
 	}
 	});
 
-        var button = document.getElementById('download_button');
+        var button = document.getElementById('download_button_in');
         button.addEventListener('click', function(){
 
             if (canvas.msToBlob) {
@@ -56,6 +58,19 @@
             } else {
                 downloadLink.href = canvas.toDataURL('image/png');
                 downloadLink.download = filename;
+                downloadLink.click();
+            }
+
+        });
+	var button2 = document.getElementById('download_button_out');
+        button2.addEventListener('click', function(){
+
+            if (canvas.msToBlob) {
+                var blob = canvas.msToBlob();
+                window.navigator.msSaveBlob(blob, filename2);
+            } else {
+                downloadLink.href = canvas.toDataURL('image/png');
+                downloadLink.download = filename2;
                 downloadLink.click();
             }
 
