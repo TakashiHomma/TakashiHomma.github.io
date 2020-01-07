@@ -3,24 +3,30 @@
 <body>
 <!--キャンバス-->
 <canvas id="my_canvas" width="600" height="450"></canvas>
+<canvas id="my_canvas2" width="600" height="450"></canvas>
 <br>
 <textarea id="canvas_text" cols="10" rows="5">テキスト</textarea>
 <!--ダウンロード用ボタン-->
 <button id="input_button">文字描画</button>
-<button id="download_button_in">内側用としてダウンロード</button>
-<button id="download_button_out">外側用としてダウンロード</button>
+<button id="download_button_in">ダウンロード</button>
+<p>内側用と外側用のテキストは","で区切る<br>左が内側用，右が外側用<br>全角5文字で一行とし，3行まで</p>
 <!--ダウンロード用リンク-->
 <a id="download_link"></a>
+<a id="download_link2"></a>
 <script>
 
     window.onload = function(){
 
         var canvas = document.getElementById('my_canvas');
+	var canvas2 = document.getElementById('my_canvas2');
         var downloadLink = document.getElementById('download_link');
+	var downloadLink2 = document.getElementById('download_link2');
         var filename = 'UnityImageIn.png';
 	var filename2 = 'UnityImageOut.png';
 	var x = canvas.width / 2;
 	var y = canvas.height / 3;
+	var x2 = canvas2.width / 2;
+	var y2 = canvas2.height / 3;
 
 	//var button2 = document.getElementById('load_text');
         //button2.addEventListener('click', function(){
@@ -31,51 +37,58 @@
 	var button1 = document.getElementById('input_button');
         button1.addEventListener('click', function(){
 	var text = document.getElementById('canvas_text').value;
+	var txt = text.split(",");
 
         /*  テストのために描画  */
         var ctx = canvas.getContext('2d');
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.font = 'bold 128px MS ゴシック';
+        ctx.font = 'bold 120px MS ゴシック';
         ctx.fillStyle = '#000080';
 	ctx.textBaseline = 'center';
 	ctx.textAlign = 'center';
-	for( var lines=text.split( "\n" ), i=0, l=lines.length; l>i; i++ ) {
+	for( var lines=txt[0].split( "\n" ), i=0, l=lines.length; l>i; i++ ) {
 	var line = lines[i];
-	var addY = 128;
+	var addY = 120;
 	var sum = 0;
 	if(i) sum += addY * i;
         ctx.fillText(line, x, y + sum);
 	}
+	var ctx2 = canvas2.getContext('2d');
+        ctx2.fillStyle = '#ffffff';
+        ctx2.fillRect(0, 0, canvas2.width, canvas2.height);
+        ctx2.font = 'bold 120px MS ゴシック';
+        ctx2.fillStyle = '#000080';
+	ctx2.textBaseline = 'center';
+	ctx2.textAlign = 'center';
+	for( var lines=txt[1].split( "\n" ), i=0, l=lines.length; l>i; i++ ) {
+	var line = lines[i];
+	var addY = 120;
+	var sum = 0;
+	if(i) sum += addY * i;
+        ctx2.fillText(line, x2, y2 + sum);
+	}
 	});
 
-        var button = document.getElementById('download_button_in');
+	var button = document.getElementById('download_button_in');
         button.addEventListener('click', function(){
 
             if (canvas.msToBlob) {
                 var blob = canvas.msToBlob();
+		var blob2 = canvas2.msToBlob();
                 window.navigator.msSaveBlob(blob, filename);
+                window.navigator.msSaveBlob(blob2, filename2);
             } else {
                 downloadLink.href = canvas.toDataURL('image/png');
+		downloadLink2.href = canvas2.toDataURL('image/png');
                 downloadLink.download = filename;
+		downloadLink2.download = filename2;
                 downloadLink.click();
+		downloadLink2.click();
             }
 
         });
-	var button2 = document.getElementById('download_button_out');
-        button2.addEventListener('click', function(){
-
-            if (canvas.msToBlob) {
-                var blob = canvas.msToBlob();
-                window.navigator.msSaveBlob(blob, filename2);
-            } else {
-                downloadLink.href = canvas.toDataURL('image/png');
-                downloadLink.download = filename2;
-                downloadLink.click();
-            }
-
-        });
-
+	
     };
 
 </script>
